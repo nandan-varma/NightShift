@@ -14,12 +14,16 @@ struct SettingsStoreTests {
         let store = SettingsStore(defaults: makeIsolatedDefaults())
 
         #expect(store.dayColorTemperatureKelvin == 6500)
-        #expect(store.nightColorTemperatureKelvin == 3400)
-        #expect(store.transitionDurationMinutes == 30)
+        #expect(store.nightColorTemperatureKelvin == 2700)
+        #expect(store.transitionDurationMinutes == 60)
         #expect(store.scheduleMode == .auto)
         #expect(store.latitude == 0)
         #expect(store.longitude == 0)
         #expect(store.launchAtLoginEnabled == false)
+        #expect(store.bedtimeRampEnabled == false)
+        #expect(store.bedtimeHour == 23)
+        #expect(store.bedtimeMinute == 0)
+        #expect(store.bedtimeColorTemperatureKelvin == 2300)
     }
 
     @Test func changesPersistAcrossInstancesSharingTheSameDefaults() {

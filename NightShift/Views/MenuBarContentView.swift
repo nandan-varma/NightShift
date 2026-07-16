@@ -19,6 +19,9 @@ struct MenuBarContentView: View {
             TransitionDurationView(settings: settings)
 
             Divider()
+            BedtimeSectionView(settings: settings)
+
+            Divider()
             LocationSectionView(settings: settings)
 
             Divider()

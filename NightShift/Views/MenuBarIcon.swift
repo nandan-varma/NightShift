@@ -1,10 +1,14 @@
 import SwiftUI
+import AppKit
 
 struct MenuBarIcon: View {
     let phase: SchedulePhase
+    @ObservedObject var settings: SettingsStore
+    let gammaController: DisplayGammaController
 
     var body: some View {
         Image(systemName: symbolName)
+            .background(MenuBarContextMenuCatcher(settings: settings, gammaController: gammaController))
     }
 
     private var symbolName: String {
@@ -13,6 +17,97 @@ struct MenuBarIcon: View {
         case .night: return "moon.fill"
         case .transitioningToNight, .transitioningToDay: return "sun.haze.fill"
         case .off: return "circle.slash"
+        }
+    }
+}
+
+/// MenuBarExtra has no public API for a distinct secondary-click menu — left
+/// and right click both just toggle the same SwiftUI window. This installs a
+/// local right-mouse-down monitor scoped to this view's own window (the
+/// status item's private button window) and pops up a standard AppKit menu
+/// instead, without disturbing the label's normal left-click behavior.
+private struct MenuBarContextMenuCatcher: NSViewRepresentable {
+    @ObservedObject var settings: SettingsStore
+    let gammaController: DisplayGammaController
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        context.coordinator.install(on: view)
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        context.coordinator.settings = settings
+        context.coordinator.gammaController = gammaController
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(settings: settings, gammaController: gammaController)
+    }
+
+    static func dismantleNSView(_ nsView: NSView, coordinator: Coordinator) {
+        coordinator.uninstall()
+    }
+
+    final class Coordinator {
+        var settings: SettingsStore
+        var gammaController: DisplayGammaController
+        private weak var view: NSView?
+        private var monitor: Any?
+
+        init(settings: SettingsStore, gammaController: DisplayGammaController) {
+            self.settings = settings
+            self.gammaController = gammaController
+        }
+
+        func install(on view: NSView) {
+            self.view = view
+            monitor = NSEvent.addLocalMonitorForEvents(matching: .rightMouseDown) { [weak self] event in
+                guard let self, let view = self.view, event.window === view.window else { return event }
+                self.showMenu(in: view)
+                return nil
+            }
+        }
+
+        func uninstall() {
+            if let monitor {
+                NSEvent.removeMonitor(monitor)
+            }
+            monitor = nil
+        }
+
+        private func showMenu(in view: NSView) {
+            let menu = NSMenu()
+
+            for mode in ScheduleMode.allCases {
+                menu.addItem(ClosureMenuItem(
+                    title: mode.label,
+                    state: settings.scheduleMode == mode ? .on : .off
+                ) { [weak self] in
+                    self?.settings.scheduleMode = mode
+                })
+            }
+
+            menu.addItem(.separator())
+
+            menu.addItem(ClosureMenuItem(
+                title: "Launch at Login",
+                state: settings.launchAtLoginEnabled ? .on : .off
+            ) { [weak self] in
+                guard let self else { return }
+                let enabled = !self.settings.launchAtLoginEnabled
+                LaunchAtLoginService.setEnabled(enabled)
+                self.settings.launchAtLoginEnabled = enabled
+            })
+
+            menu.addItem(.separator())
+
+            menu.addItem(ClosureMenuItem(title: "Quit NightShift") { [weak self] in
+                self?.gammaController.restoreNeutral()
+                NSApp.terminate(nil)
+            })
+
+            menu.popUp(positioning: nil, at: .zero, in: view)
         }
     }
 }

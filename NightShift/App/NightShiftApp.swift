@@ -12,7 +12,11 @@ struct NightShiftApp: App {
                 gammaController: appDelegate.gammaController
             )
         } label: {
-            MenuBarIcon(phase: appDelegate.scheduleEngine.currentPhase)
+            MenuBarIcon(
+                phase: appDelegate.scheduleEngine.currentPhase,
+                settings: appDelegate.settings,
+                gammaController: appDelegate.gammaController
+            )
         }
         .menuBarExtraStyle(.window)
     }

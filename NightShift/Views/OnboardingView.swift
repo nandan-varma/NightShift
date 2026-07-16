@@ -116,6 +116,12 @@ struct OnboardingView: View {
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
 
+            Text("Tip: turn on Wind Down Before Bedtime in Settings for extra warmth in the hour before you sleep.")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+
             LaunchAtLoginToggleView(settings: settings)
                 .padding(.vertical, 4)
 

@@ -75,8 +75,10 @@ final class ScheduleEngine: ObservableObject {
             nextTransitionDate = nil
         case .auto:
             let solarTimes = solarTimesForToday(now: now)
-            desiredKelvin = Self.interpolatedKelvin(now: now, solar: solarTimes, settings: settings)
-            currentPhase = Self.phase(now: now, solar: solarTimes, settings: settings)
+            let phase = Self.phase(now: now, solar: solarTimes, settings: settings)
+            let base = Self.interpolatedKelvin(now: now, solar: solarTimes, settings: settings)
+            desiredKelvin = Self.applyBedtimeTaper(baseKelvin: base, phase: phase, now: now, settings: settings)
+            currentPhase = phase
             nextTransitionDate = Self.nextTransition(now: now, solar: solarTimes)
         }
 
@@ -149,6 +151,47 @@ final class ScheduleEngine: ObservableObject {
     static func nextTransition(now: Date, solar: SolarTimes) -> Date? {
         guard case .normal(let sunrise, let sunset) = solar.dayKind else { return nil }
         return [sunrise, sunset].filter { $0 > now }.min()
+    }
+
+    /// Opt-in extra taper: the last `bedtimeRampMinutes` before bedtime warm
+    /// further from `baseKelvin` down to `bedtimeColorTemperatureKelvin`, since
+    /// the pre-sleep window matters most for melatonin and rarely lines up
+    /// with sunset. Only applies once already in the flat "night" phase — it
+    /// layers on top of, rather than competing with, the sunset/sunrise ramp.
+    static let bedtimeRampMinutes: Double = 60
+
+    static func applyBedtimeTaper(baseKelvin: Double, phase: SchedulePhase, now: Date, settings: SettingsStore) -> Double {
+        guard settings.bedtimeRampEnabled, phase == .night else { return baseKelvin }
+        guard let bedtime = nearestBedtime(now: now, hour: settings.bedtimeHour, minute: settings.bedtimeMinute) else {
+            return baseKelvin
+        }
+
+        let rampSeconds = bedtimeRampMinutes * 60
+        let rampStart = bedtime.addingTimeInterval(-rampSeconds)
+
+        if now >= bedtime {
+            return settings.bedtimeColorTemperatureKelvin
+        }
+        guard now >= rampStart else { return baseKelvin }
+
+        let t = now.timeIntervalSince(rampStart) / rampSeconds
+        return lerp(from: baseKelvin, to: settings.bedtimeColorTemperatureKelvin, t: smoothstep(t))
+    }
+
+    /// The bedtime instant (today, yesterday, or tomorrow at `hour:minute`)
+    /// closest to `now` — needed since a bedtime shortly after midnight can
+    /// be "closer" via yesterday's or today's instance depending on `now`.
+    static func nearestBedtime(now: Date, hour: Int, minute: Int) -> Date? {
+        let calendar = Calendar.current
+        guard let todayBedtime = calendar.date(bySettingHour: hour, minute: minute, second: 0, of: now) else {
+            return nil
+        }
+        let candidates = [
+            todayBedtime.addingTimeInterval(-86400),
+            todayBedtime,
+            todayBedtime.addingTimeInterval(86400),
+        ]
+        return candidates.min { abs($0.timeIntervalSince(now)) < abs($1.timeIntervalSince(now)) }
     }
 
     /// Returns progress `0...1` through a `[center - halfWindow, center + halfWindow]`

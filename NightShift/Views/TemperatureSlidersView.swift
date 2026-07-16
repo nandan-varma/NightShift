@@ -3,7 +3,7 @@ import SwiftUI
 struct TemperatureSlidersView: View {
     @ObservedObject var settings: SettingsStore
 
-    private let range: ClosedRange<Double> = 2700...6500
+    private let range: ClosedRange<Double> = 2000...6500
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
