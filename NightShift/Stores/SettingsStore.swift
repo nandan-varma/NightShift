@@ -9,12 +9,11 @@ final class SettingsStore: ObservableObject {
         static let nightColorTemperatureKelvin = "nightColorTemperatureKelvin"
         static let transitionDurationMinutes = "transitionDurationMinutes"
         static let scheduleMode = "scheduleMode"
-        static let locationMode = "locationMode"
-        static let manualLatitude = "manualLatitude"
-        static let manualLongitude = "manualLongitude"
-        static let manualLocationName = "manualLocationName"
+        static let latitude = "latitude"
+        static let longitude = "longitude"
+        static let locationName = "locationName"
         static let launchAtLoginEnabled = "launchAtLoginEnabled"
-        static let hasRequestedLocationPermission = "hasRequestedLocationPermission"
+        static let hasCompletedOnboarding = "hasCompletedOnboarding"
     }
 
     private let defaults: UserDefaults
@@ -35,28 +34,24 @@ final class SettingsStore: ObservableObject {
         didSet { defaults.set(scheduleMode.rawValue, forKey: Key.scheduleMode) }
     }
 
-    @Published var locationMode: LocationMode {
-        didSet { defaults.set(locationMode.rawValue, forKey: Key.locationMode) }
+    @Published var latitude: Double {
+        didSet { defaults.set(latitude, forKey: Key.latitude) }
     }
 
-    @Published var manualLatitude: Double {
-        didSet { defaults.set(manualLatitude, forKey: Key.manualLatitude) }
+    @Published var longitude: Double {
+        didSet { defaults.set(longitude, forKey: Key.longitude) }
     }
 
-    @Published var manualLongitude: Double {
-        didSet { defaults.set(manualLongitude, forKey: Key.manualLongitude) }
-    }
-
-    @Published var manualLocationName: String {
-        didSet { defaults.set(manualLocationName, forKey: Key.manualLocationName) }
+    @Published var locationName: String {
+        didSet { defaults.set(locationName, forKey: Key.locationName) }
     }
 
     @Published var launchAtLoginEnabled: Bool {
         didSet { defaults.set(launchAtLoginEnabled, forKey: Key.launchAtLoginEnabled) }
     }
 
-    @Published var hasRequestedLocationPermission: Bool {
-        didSet { defaults.set(hasRequestedLocationPermission, forKey: Key.hasRequestedLocationPermission) }
+    @Published var hasCompletedOnboarding: Bool {
+        didSet { defaults.set(hasCompletedOnboarding, forKey: Key.hasCompletedOnboarding) }
     }
 
     init(defaults: UserDefaults = .standard) {
@@ -66,11 +61,10 @@ final class SettingsStore: ObservableObject {
         nightColorTemperatureKelvin = defaults.object(forKey: Key.nightColorTemperatureKelvin) as? Double ?? 3400
         transitionDurationMinutes = defaults.object(forKey: Key.transitionDurationMinutes) as? Double ?? 30
         scheduleMode = ScheduleMode(rawValue: defaults.string(forKey: Key.scheduleMode) ?? "") ?? .auto
-        locationMode = LocationMode(rawValue: defaults.string(forKey: Key.locationMode) ?? "") ?? .automatic
-        manualLatitude = defaults.object(forKey: Key.manualLatitude) as? Double ?? 0
-        manualLongitude = defaults.object(forKey: Key.manualLongitude) as? Double ?? 0
-        manualLocationName = defaults.string(forKey: Key.manualLocationName) ?? ""
+        latitude = defaults.object(forKey: Key.latitude) as? Double ?? 0
+        longitude = defaults.object(forKey: Key.longitude) as? Double ?? 0
+        locationName = defaults.string(forKey: Key.locationName) ?? ""
         launchAtLoginEnabled = defaults.bool(forKey: Key.launchAtLoginEnabled)
-        hasRequestedLocationPermission = defaults.bool(forKey: Key.hasRequestedLocationPermission)
+        hasCompletedOnboarding = defaults.bool(forKey: Key.hasCompletedOnboarding)
     }
 }

@@ -9,7 +9,6 @@ struct NightShiftApp: App {
             MenuBarContentView(
                 settings: appDelegate.settings,
                 scheduleEngine: appDelegate.scheduleEngine,
-                locationService: appDelegate.locationService,
                 gammaController: appDelegate.gammaController
             )
         } label: {

@@ -10,3 +10,6 @@ xcuserdata/
 # Swift Package Manager
 .swiftpm/
 .build/
+
+# Test coverage artifacts
+*.profraw

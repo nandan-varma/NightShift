@@ -3,7 +3,6 @@ import SwiftUI
 struct MenuBarContentView: View {
     @ObservedObject var settings: SettingsStore
     @ObservedObject var scheduleEngine: ScheduleEngine
-    @ObservedObject var locationService: LocationService
     let gammaController: DisplayGammaController
 
     var body: some View {
@@ -20,7 +19,7 @@ struct MenuBarContentView: View {
             TransitionDurationView(settings: settings)
 
             Divider()
-            LocationSectionView(settings: settings, locationService: locationService)
+            LocationSectionView(settings: settings)
 
             Divider()
             LaunchAtLoginToggleView(settings: settings)

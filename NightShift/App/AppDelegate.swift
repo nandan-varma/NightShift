@@ -1,15 +1,16 @@
 import AppKit
+import SwiftUI
 import CoreGraphics
 import Darwin
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     let settings = SettingsStore()
-    let locationService = LocationService()
     let gammaController = DisplayGammaController()
-    private(set) lazy var scheduleEngine = ScheduleEngine(settings: settings, locationService: locationService, gammaController: gammaController)
+    private(set) lazy var scheduleEngine = ScheduleEngine(settings: settings, gammaController: gammaController)
 
     private var reconfigDebounceWorkItem: DispatchWorkItem?
     private static var sharedGammaController: DisplayGammaController?
+    private var onboardingWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -33,7 +34,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             object: nil
         )
 
-        locationService.requestAuthorizationAndLocation()
+        if !settings.hasCompletedOnboarding {
+            showOnboardingWindow()
+        }
+
         scheduleEngine.start()
     }
 
@@ -55,6 +59,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         reconfigDebounceWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: workItem)
+    }
+
+    private func showOnboardingWindow() {
+        let onboarding = OnboardingView(settings: settings) { [weak self] in
+            self?.onboardingWindow?.close()
+        }
+
+        let window = NSWindow(contentViewController: NSHostingController(rootView: onboarding))
+        window.title = "Welcome to NightShift"
+        window.styleMask = [.titled, .closable]
+        window.isReleasedWhenClosed = false
+        window.delegate = self
+        window.center()
+        onboardingWindow = window
+
+        NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        guard (notification.object as? NSWindow) === onboardingWindow else { return }
+        settings.hasCompletedOnboarding = true
+        onboardingWindow = nil
     }
 }
 

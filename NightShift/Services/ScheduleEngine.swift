@@ -11,7 +11,6 @@ final class ScheduleEngine: ObservableObject {
     @Published private(set) var nextTransitionDate: Date?
 
     private let settings: SettingsStore
-    private let locationService: LocationService
     private let gammaController: DisplayGammaController
 
     private var todaySolarTimes: SolarTimes?
@@ -21,9 +20,8 @@ final class ScheduleEngine: ObservableObject {
     private static let tickInterval: TimeInterval = 30
     private static let kelvinChangeThreshold: Double = 5
 
-    init(settings: SettingsStore, locationService: LocationService, gammaController: DisplayGammaController) {
+    init(settings: SettingsStore, gammaController: DisplayGammaController) {
         self.settings = settings
-        self.locationService = locationService
         self.gammaController = gammaController
 
         observeSettingsChanges()
@@ -94,29 +92,13 @@ final class ScheduleEngine: ObservableObject {
             return cached
         }
 
-        let coordinate = currentCoordinate
-        let computed = SolarCalculator.sunriseSunset(for: now, latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let computed = SolarCalculator.sunriseSunset(for: now, latitude: settings.latitude, longitude: settings.longitude)
         todaySolarTimes = computed
         return computed
     }
 
-    private var currentCoordinate: Coordinate {
-        switch settings.locationMode {
-        case .automatic:
-            return locationService.currentCoordinate ?? Coordinate(latitude: settings.manualLatitude, longitude: settings.manualLongitude)
-        case .manual:
-            return Coordinate(latitude: settings.manualLatitude, longitude: settings.manualLongitude)
-        }
-    }
-
     private func observeSettingsChanges() {
         settings.objectWillChange
-            .sink { [weak self] _ in
-                Task { @MainActor in self?.todaySolarTimes = nil; self?.tick() }
-            }
-            .store(in: &cancellables)
-
-        locationService.$currentCoordinate
             .sink { [weak self] _ in
                 Task { @MainActor in self?.todaySolarTimes = nil; self?.tick() }
             }

@@ -17,7 +17,8 @@ struct SettingsStoreTests {
         #expect(store.nightColorTemperatureKelvin == 3400)
         #expect(store.transitionDurationMinutes == 30)
         #expect(store.scheduleMode == .auto)
-        #expect(store.locationMode == .automatic)
+        #expect(store.latitude == 0)
+        #expect(store.longitude == 0)
         #expect(store.launchAtLoginEnabled == false)
     }
 
@@ -27,13 +28,11 @@ struct SettingsStoreTests {
         let first = SettingsStore(defaults: defaults)
         first.nightColorTemperatureKelvin = 2700
         first.scheduleMode = .forceNight
-        first.locationMode = .manual
-        first.manualLocationName = "Bengaluru"
+        first.locationName = "Bengaluru"
 
         let second = SettingsStore(defaults: defaults)
         #expect(second.nightColorTemperatureKelvin == 2700)
         #expect(second.scheduleMode == .forceNight)
-        #expect(second.locationMode == .manual)
-        #expect(second.manualLocationName == "Bengaluru")
+        #expect(second.locationName == "Bengaluru")
     }
 }
