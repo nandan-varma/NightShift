@@ -8,7 +8,7 @@ struct MenuBarIcon: View {
 
     var body: some View {
         Image(systemName: symbolName)
-            .background(MenuBarContextMenuCatcher(settings: settings, gammaController: gammaController))
+            .overlay(MenuBarContextMenuCatcher(settings: settings, gammaController: gammaController))
     }
 
     private var symbolName: String {
@@ -63,8 +63,8 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
         func install(on view: NSView) {
             self.view = view
             monitor = NSEvent.addLocalMonitorForEvents(matching: .rightMouseDown) { [weak self] event in
-                guard let self, let view = self.view, event.window === view.window else { return event }
-                self.showMenu(in: view)
+                guard let self else { return event }
+                self.showMenu(for: event)
                 return nil
             }
         }
@@ -76,7 +76,9 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
             monitor = nil
         }
 
-        private func showMenu(in view: NSView) {
+        private func showMenu(for event: NSEvent) {
+            guard let anchorView = event.window?.contentView else { return }
+
             let menu = NSMenu()
 
             for mode in ScheduleMode.allCases {
@@ -107,7 +109,8 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
                 NSApp.terminate(nil)
             })
 
-            menu.popUp(positioning: nil, at: .zero, in: view)
+            let locationInView = anchorView.convert(event.locationInWindow, from: nil)
+            menu.popUp(positioning: nil, at: locationInView, in: anchorView)
         }
     }
 }
