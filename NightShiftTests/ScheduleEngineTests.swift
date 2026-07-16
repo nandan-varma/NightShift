@@ -106,4 +106,69 @@ struct ScheduleEngineTests {
         let afterSunset = sunset.addingTimeInterval(3600)
         #expect(ScheduleEngine.nextTransition(now: afterSunset, solar: fixedSolar) == nil)
     }
+
+    // MARK: - phase()
+
+    @Test func phaseIsTransitioningDuringSunriseAndSunsetWindows() {
+        let settings = makeSettings(transitionMinutes: 30)
+        guard case .normal(let sunrise, let sunset) = fixedSolar.dayKind else { fatalError() }
+        #expect(ScheduleEngine.phase(now: sunrise, solar: fixedSolar, settings: settings) == .transitioningToDay)
+        #expect(ScheduleEngine.phase(now: sunset, solar: fixedSolar, settings: settings) == .transitioningToNight)
+    }
+
+    @Test func phaseIsDayAtMiddayAndNightAtMidnight() {
+        let settings = makeSettings(transitionMinutes: 30)
+        guard case .normal(let sunrise, let sunset) = fixedSolar.dayKind else { fatalError() }
+        let midday = sunrise.addingTimeInterval(sunset.timeIntervalSince(sunrise) / 2)
+        let midnight = sunset.addingTimeInterval(6 * 3600)
+        #expect(ScheduleEngine.phase(now: midday, solar: fixedSolar, settings: settings) == .day)
+        #expect(ScheduleEngine.phase(now: midnight, solar: fixedSolar, settings: settings) == .night)
+    }
+
+    @Test func phaseIsDayDuringPolarDayAndNightDuringPolarNight() {
+        let settings = makeSettings()
+        let polarDay = SolarTimes(dayKind: .polarDay, referenceDate: Date())
+        let polarNight = SolarTimes(dayKind: .polarNight, referenceDate: Date())
+        #expect(ScheduleEngine.phase(now: Date(), solar: polarDay, settings: settings) == .day)
+        #expect(ScheduleEngine.phase(now: Date(), solar: polarNight, settings: settings) == .night)
+    }
+
+    // MARK: - solarCalculatorAnchor (regression coverage for the UTC/local day-boundary bug)
+
+    @Test func lateEveningInNegativeUTCOffsetZoneStillResolvesTodaysSunset() throws {
+        var pacific = Calendar(identifier: .gregorian)
+        pacific.timeZone = try #require(TimeZone(identifier: "America/Los_Angeles"))
+
+        // 5:30pm PDT on June 21 is already past midnight UTC (June 22) — the
+        // exact instant where naively feeding `now` straight into
+        // SolarCalculator (which buckets by UTC calendar day) would jump to
+        // tomorrow's — still hours away — sunrise/sunset instead of today's,
+        // snapping the display to full night Kelvin hours before real sunset.
+        let now = try #require(pacific.date(from: DateComponents(year: 2024, month: 6, day: 21, hour: 17, minute: 30)))
+
+        let anchor = ScheduleEngine.solarCalculatorAnchor(now: now, calendar: pacific)
+        let times = SolarCalculator.sunriseSunset(for: anchor, latitude: 37.7749, longitude: -122.4194)
+        let sunset = try #require(times.sunset)
+
+        let hoursUntilSunset = sunset.timeIntervalSince(now) / 3600
+        #expect(hoursUntilSunset > 0 && hoursUntilSunset < 4)
+    }
+
+    @Test func earlyMorningInPositiveUTCOffsetZoneStillResolvesTodaysSunrise() throws {
+        var india = Calendar(identifier: .gregorian)
+        india.timeZone = try #require(TimeZone(identifier: "Asia/Kolkata"))
+
+        // 2am IST is still the previous UTC calendar day (IST is UTC+5:30,
+        // so UTC doesn't roll over to "today" until ~5:30am local) — the
+        // mirror-image case where naively feeding `now` in would resolve
+        // yesterday's already-passed sunrise instead of today's upcoming one.
+        let now = try #require(india.date(from: DateComponents(year: 2024, month: 6, day: 21, hour: 2, minute: 0)))
+
+        let anchor = ScheduleEngine.solarCalculatorAnchor(now: now, calendar: india)
+        let times = SolarCalculator.sunriseSunset(for: anchor, latitude: 19.0760, longitude: 72.8777)
+        let sunrise = try #require(times.sunrise)
+
+        let hoursUntilSunrise = sunrise.timeIntervalSince(now) / 3600
+        #expect(hoursUntilSunrise > 0 && hoursUntilSunrise < 6)
+    }
 }

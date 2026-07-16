@@ -14,6 +14,7 @@ final class ScheduleEngine: ObservableObject {
     private let gammaController: DisplayGammaController
 
     private var todaySolarTimes: SolarTimes?
+    private var todaySolarTimesLocalDay: Date?
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
 
@@ -42,14 +43,23 @@ final class ScheduleEngine: ObservableObject {
         timer = nil
     }
 
-    /// Re-applies the currently computed Kelvin value to the displays.
-    /// Called after display reconfiguration or wake-from-sleep, since
-    /// transfer functions can silently reset in those cases.
-    func reapplyCurrentState() {
+    /// Re-applies the current state to the displays. Called after display
+    /// reconfiguration or wake-from-sleep, since transfer functions can
+    /// silently reset to neutral in those cases. Recomputes for `now`
+    /// (rather than trusting the cached `currentKelvin`) since a long sleep
+    /// can span a day/night phase change, and always force-applies rather
+    /// than going through `tick()`'s "skip tiny deltas" gating — the OS just
+    /// reset the transfer function out from under us, so even a desired
+    /// Kelvin close to the last-known value still needs to be re-sent.
+    func reapplyCurrentState(now: Date = Date()) {
         guard settings.scheduleMode != .off else {
+            currentPhase = .off
+            nextTransitionDate = nil
             gammaController.restoreNeutral()
             return
         }
+
+        currentKelvin = desiredKelvin(now: now)
         gammaController.apply(kelvin: currentKelvin)
     }
 
@@ -61,42 +71,65 @@ final class ScheduleEngine: ObservableObject {
             return
         }
 
-        let desiredKelvin: Double
+        let desired = desiredKelvin(now: now)
+        if abs(desired - currentKelvin) >= Self.kelvinChangeThreshold {
+            gammaController.apply(kelvin: desired)
+        }
+        currentKelvin = desired
+    }
+
+    /// Computes the desired Kelvin for `now` under the current mode, updating
+    /// `currentPhase`/`nextTransitionDate` as a side effect since both
+    /// `tick()` and `reapplyCurrentState()` need them kept in sync with
+    /// whatever Kelvin they resolve to. Callers must guard `.off` themselves.
+    private func desiredKelvin(now: Date) -> Double {
         switch settings.scheduleMode {
         case .off:
-            return // handled above
+            return currentKelvin // unreachable: callers guard `.off` before invoking this
         case .forceDay:
-            desiredKelvin = settings.dayColorTemperatureKelvin
             currentPhase = .day
             nextTransitionDate = nil
+            return settings.dayColorTemperatureKelvin
         case .forceNight:
-            desiredKelvin = settings.nightColorTemperatureKelvin
             currentPhase = .night
             nextTransitionDate = nil
+            return settings.nightColorTemperatureKelvin
         case .auto:
             let solarTimes = solarTimesForToday(now: now)
             let phase = Self.phase(now: now, solar: solarTimes, settings: settings)
             let base = Self.interpolatedKelvin(now: now, solar: solarTimes, settings: settings)
-            desiredKelvin = Self.applyBedtimeTaper(baseKelvin: base, phase: phase, now: now, settings: settings)
             currentPhase = phase
             nextTransitionDate = Self.nextTransition(now: now, solar: solarTimes)
+            return Self.applyBedtimeTaper(baseKelvin: base, phase: phase, now: now, settings: settings)
         }
-
-        if abs(desiredKelvin - currentKelvin) >= Self.kelvinChangeThreshold {
-            gammaController.apply(kelvin: desiredKelvin)
-        }
-        currentKelvin = desiredKelvin
     }
 
     private func solarTimesForToday(now: Date) -> SolarTimes {
         let calendar = Calendar.current
-        if let cached = todaySolarTimes, calendar.isDate(cached.referenceDate, inSameDayAs: now) {
+        if let cached = todaySolarTimes, let cachedLocalDay = todaySolarTimesLocalDay,
+           calendar.isDate(cachedLocalDay, inSameDayAs: now) {
             return cached
         }
 
-        let computed = SolarCalculator.sunriseSunset(for: now, latitude: settings.latitude, longitude: settings.longitude)
+        let anchor = Self.solarCalculatorAnchor(now: now, calendar: calendar)
+        let computed = SolarCalculator.sunriseSunset(for: anchor, latitude: settings.latitude, longitude: settings.longitude)
         todaySolarTimes = computed
+        todaySolarTimesLocalDay = now
         return computed
+    }
+
+    /// The Date to feed into `SolarCalculator.sunriseSunset` so it resolves
+    /// times for the LOCAL calendar day containing `now` — not whatever UTC
+    /// calendar day the raw `now` instant happens to fall in, which drifts
+    /// from the local day for any timezone away from UTC+0 (e.g. in the
+    /// evening for zones west of Greenwich, `now` can already be past UTC
+    /// midnight while the local day hasn't turned over yet, which would
+    /// otherwise make the calculator jump to tomorrow's — still future —
+    /// sunrise/sunset). Anchoring to local noon — the point in the day
+    /// furthest from both the local and UTC midnight boundaries — keeps the
+    /// two calendars in sync for any real-world timezone offset.
+    static func solarCalculatorAnchor(now: Date, calendar: Calendar) -> Date {
+        calendar.date(bySettingHour: 12, minute: 0, second: 0, of: now) ?? now
     }
 
     private func observeSettingsChanges() {

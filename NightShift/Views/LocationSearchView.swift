@@ -15,6 +15,7 @@ struct LocationSearchView: View {
             HStack {
                 TextField("City or address", text: $citySearchText)
                     .textFieldStyle(.roundedBorder)
+                    .disabled(isResolving)
                     .onSubmit(resolveCity)
                 Button("Find") { resolveCity() }
                     .disabled(citySearchText.isEmpty || isResolving)
@@ -45,7 +46,7 @@ struct LocationSearchView: View {
     }
 
     private func resolveCity() {
-        guard !citySearchText.isEmpty else { return }
+        guard !citySearchText.isEmpty, !isResolving else { return }
         isResolving = true
         resolutionError = nil
         Task {

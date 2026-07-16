@@ -9,21 +9,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private(set) lazy var scheduleEngine = ScheduleEngine(settings: settings, gammaController: gammaController)
 
     private var reconfigDebounceWorkItem: DispatchWorkItem?
-    private static var sharedGammaController: DisplayGammaController?
     private var onboardingWindow: NSWindow?
+    private var sigintSource: DispatchSourceSignal?
+    private var sigtermSource: DispatchSourceSignal?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
-        Self.sharedGammaController = gammaController
-        signal(SIGINT) { _ in
-            AppDelegate.sharedGammaController?.restoreNeutral()
-            exit(0)
-        }
-        signal(SIGTERM) { _ in
-            AppDelegate.sharedGammaController?.restoreNeutral()
-            exit(0)
-        }
+        installSignalHandlers()
 
         CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallback, Unmanaged.passUnretained(self).toOpaque())
 
@@ -46,6 +39,36 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         gammaController.restoreNeutral()
         CGDisplayRemoveReconfigurationCallback(displayReconfigurationCallback, Unmanaged.passUnretained(self).toOpaque())
         NSWorkspace.shared.notificationCenter.removeObserver(self)
+    }
+
+    /// Installs SIGINT/SIGTERM handling via GCD dispatch sources rather than a
+    /// raw `signal()` handler. A raw handler runs on the signal-delivery
+    /// thread inside the actual signal context, where calling into Swift/ARC
+    /// code (retaining `gammaController`, invoking its method) is not
+    /// async-signal-safe — if the signal lands while the main thread already
+    /// holds an ARC-related lock, re-entering that same machinery can
+    /// deadlock, which would skip `restoreNeutral()` and leave the display
+    /// stuck warm. A dispatch source instead just observes the signal and
+    /// runs its handler as an ordinary block on the main queue.
+    private func installSignalHandlers() {
+        signal(SIGINT, SIG_IGN)
+        signal(SIGTERM, SIG_IGN)
+
+        let sigint = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
+        sigint.setEventHandler { [gammaController] in
+            gammaController.restoreNeutral()
+            exit(0)
+        }
+        sigint.resume()
+        sigintSource = sigint
+
+        let sigterm = DispatchSource.makeSignalSource(signal: SIGTERM, queue: .main)
+        sigterm.setEventHandler { [gammaController] in
+            gammaController.restoreNeutral()
+            exit(0)
+        }
+        sigterm.resume()
+        sigtermSource = sigterm
     }
 
     @objc private func handleWake() {

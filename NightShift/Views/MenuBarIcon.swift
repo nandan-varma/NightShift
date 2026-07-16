@@ -86,7 +86,7 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
                     title: mode.label,
                     state: settings.scheduleMode == mode ? .on : .off
                 ) { [weak self] in
-                    self?.settings.scheduleMode = mode
+                    Task { @MainActor in self?.settings.scheduleMode = mode }
                 })
             }
 
@@ -96,17 +96,21 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
                 title: "Launch at Login",
                 state: settings.launchAtLoginEnabled ? .on : .off
             ) { [weak self] in
-                guard let self else { return }
-                let enabled = !self.settings.launchAtLoginEnabled
-                LaunchAtLoginService.setEnabled(enabled)
-                self.settings.launchAtLoginEnabled = enabled
+                Task { @MainActor in
+                    guard let self else { return }
+                    let enabled = !self.settings.launchAtLoginEnabled
+                    LaunchAtLoginService.setEnabled(enabled)
+                    self.settings.launchAtLoginEnabled = enabled
+                }
             })
 
             menu.addItem(.separator())
 
             menu.addItem(ClosureMenuItem(title: "Quit NightShift") { [weak self] in
-                self?.gammaController.restoreNeutral()
-                NSApp.terminate(nil)
+                Task { @MainActor in
+                    self?.gammaController.restoreNeutral()
+                    NSApp.terminate(nil)
+                }
             })
 
             let locationInView = anchorView.convert(event.locationInWindow, from: nil)

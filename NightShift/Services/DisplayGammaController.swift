@@ -6,8 +6,6 @@ import Foundation
 /// channel's transfer-function max (the same lightweight technique used by
 /// f.lux/Shifty/NightOwl), rather than building a full 256-entry gamma table.
 final class DisplayGammaController {
-    private static let maxDisplays: UInt32 = 16
-
     /// Applies the given Kelvin value's RGB gain to every active display.
     func apply(kelvin: Double) {
         let gain = ColorTemperature.kelvinToRGBGain(kelvin)
@@ -31,11 +29,11 @@ final class DisplayGammaController {
     }
 
     private func forEachActiveDisplay(_ body: (CGDirectDisplayID) -> Void) {
-        var displays = [CGDirectDisplayID](repeating: 0, count: Int(Self.maxDisplays))
         var displayCount: UInt32 = 0
+        guard CGGetActiveDisplayList(0, nil, &displayCount) == .success, displayCount > 0 else { return }
 
-        let result = CGGetActiveDisplayList(Self.maxDisplays, &displays, &displayCount)
-        guard result == .success else { return }
+        var displays = [CGDirectDisplayID](repeating: 0, count: Int(displayCount))
+        guard CGGetActiveDisplayList(displayCount, &displays, &displayCount) == .success else { return }
 
         for index in 0..<Int(displayCount) {
             body(displays[index])
