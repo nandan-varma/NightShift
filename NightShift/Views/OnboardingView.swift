@@ -89,6 +89,13 @@ struct OnboardingView: View {
             }
             .keyboardShortcut(.defaultAction)
             .controlSize(.large)
+            .disabled(settings.locationName.isEmpty)
+
+            if settings.locationName.isEmpty {
+                Text("Search for a city to continue.")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
         }
     }
 
