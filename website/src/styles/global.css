@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night-950: #0a0f2c;
+  --color-night-900: #12162f;
+  --color-night-800: #1b1338;
+  --color-night-700: #241a3f;
+  --color-amber-glow: #ff9a4d;
+  --color-day-glow: #eaf4ff;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-night-950);
+}

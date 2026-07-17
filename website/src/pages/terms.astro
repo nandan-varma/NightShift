@@ -1,0 +1,69 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const lastUpdated = "July 16, 2026";
+---
+
+<Layout
+	title="Terms of Use — NightShift"
+	description="Terms of use for the NightShift macOS app."
+>
+	<article class="mx-auto max-w-2xl px-6 py-16">
+		<h1 class="text-3xl font-semibold tracking-tight text-white">Terms of Use</h1>
+		<p class="mt-2 text-sm text-slate-500">Last updated: {lastUpdated}</p>
+
+		<div class="mt-10 space-y-8 text-sm leading-relaxed text-slate-300">
+			<p>
+				NightShift is distributed through the Mac App Store, so Apple's
+				<a
+					href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+					class="text-white underline underline-offset-2"
+					target="_blank"
+					rel="noopener noreferrer"
+				>Licensed Application End User License Agreement</a>
+				applies to your use of the app in addition to the terms below.
+			</p>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Use of the app</h2>
+				<p class="mt-3 text-slate-400">
+					You're free to use NightShift on any Mac where you're signed in with the Apple ID that
+					licensed it, subject to Apple's standard terms for App Store purchases and family sharing.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">No warranty</h2>
+				<p class="mt-3 text-slate-400">
+					NightShift is provided "as is," without warranty of any kind. It adjusts your display's
+					color output using standard, public macOS APIs, but I can't guarantee it will be free of
+					bugs or compatible with every display or Mac configuration.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Limitation of liability</h2>
+				<p class="mt-3 text-slate-400">
+					To the extent permitted by law, I'm not liable for any indirect, incidental, or
+					consequential damages arising from your use of NightShift.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Changes</h2>
+				<p class="mt-3 text-slate-400">
+					These terms may be updated from time to time; the "last updated" date above will reflect
+					the latest revision.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Contact</h2>
+				<p class="mt-3 text-slate-400">
+					Questions about these terms can be sent to
+					<a href="mailto:nandanvarma.me@gmail.com" class="text-white underline underline-offset-2">nandanvarma.me@gmail.com</a>.
+				</p>
+			</section>
+		</div>
+	</article>
+</Layout>

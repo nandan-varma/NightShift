@@ -1,0 +1,36 @@
+---
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/png" href="/favicon-32.png" />
+		<link rel="apple-touch-icon" href="/icon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="/og-icon.png" />
+		<meta property="og:type" content="website" />
+		<meta name="theme-color" content="#0a0f2c" />
+		<title>{title}</title>
+	</head>
+	<body class="min-h-screen bg-night-950 font-sans text-slate-200 antialiased selection:bg-amber-glow/30">
+		<Nav />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>

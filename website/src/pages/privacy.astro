@@ -1,0 +1,80 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const lastUpdated = "July 16, 2026";
+---
+
+<Layout
+	title="Privacy Policy — NightShift"
+	description="NightShift's privacy policy: what data it collects (almost none), how location is used, and how it stays fully offline."
+>
+	<article class="mx-auto max-w-2xl px-6 py-16">
+		<h1 class="text-3xl font-semibold tracking-tight text-white">Privacy Policy</h1>
+		<p class="mt-2 text-sm text-slate-500">Last updated: {lastUpdated}</p>
+
+		<div class="mt-10 space-y-8 text-sm leading-relaxed text-slate-300">
+			<p>
+				NightShift is designed to run entirely on your Mac. This policy explains the little data the
+				app touches and why — there is no account system, no analytics, and no advertising.
+			</p>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">What NightShift does not do</h2>
+				<ul class="mt-3 list-disc space-y-1.5 pl-5 text-slate-400">
+					<li>No analytics or usage tracking of any kind</li>
+					<li>No crash reporting sent to us or any third party</li>
+					<li>No advertising or ad identifiers</li>
+					<li>No account, sign-in, or server-side profile</li>
+					<li>No continuous or background location tracking</li>
+				</ul>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Location</h2>
+				<p class="mt-3 text-slate-400">
+					NightShift needs your approximate coordinates to calculate sunrise and sunset times.
+					You type a city or address once during setup; that text is sent to Apple's geocoding
+					service to resolve it into a latitude and longitude. NightShift does not use continuous
+					GPS tracking and has no access to your Mac's live location — the resolved coordinate is
+					saved locally on your device and the app runs fully offline afterward, recalculating solar
+					times itself with no further network requests.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">What's stored, and where</h2>
+				<p class="mt-3 text-slate-400">
+					All preferences — your resolved location, color temperature settings, schedule mode,
+					bedtime settings, and launch-at-login preference — are stored locally in
+					<code class="rounded bg-white/5 px-1.5 py-0.5 text-xs text-slate-300">UserDefaults</code>
+					on your Mac. None of it is transmitted anywhere, synced to a server, or accessible to us.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Third parties</h2>
+				<p class="mt-3 text-slate-400">
+					The only outside service NightShift talks to is Apple's geocoding service, used solely to
+					resolve the address you type during location setup. NightShift includes no third-party
+					SDKs, no ad networks, and no analytics libraries.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Changes to this policy</h2>
+				<p class="mt-3 text-slate-400">
+					If this policy changes, the "last updated" date above will change with it. Material
+					changes will also be reflected in the app's release notes.
+				</p>
+			</section>
+
+			<section>
+				<h2 class="text-lg font-semibold text-white">Contact</h2>
+				<p class="mt-3 text-slate-400">
+					Questions about this policy can be sent to
+					<a href="mailto:nandanvarma.me@gmail.com" class="text-white underline underline-offset-2">nandanvarma.me@gmail.com</a>.
+				</p>
+			</section>
+		</div>
+	</article>
+</Layout>

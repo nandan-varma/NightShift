@@ -1,0 +1,68 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const faqs = [
+  {
+    q: "My display isn't changing color at all.",
+    a: "Check the mode shown in the menu bar popover — if it's set to Off, NightShift won't adjust anything. Also confirm at least one display is connected and awake; NightShift skips displays that are asleep or disconnected.",
+  },
+  {
+    q: "The colors reset after my Mac wakes up or I reconnect a monitor.",
+    a: "This is expected on macOS itself, not a bug — the OS resets each display's color profile on wake and on display reconfiguration. NightShift detects both and reapplies your settings automatically within a second.",
+  },
+  {
+    q: "Does NightShift need Location Services permission?",
+    a: "No. You type a city or address once during setup, and NightShift resolves it to coordinates a single time. It never requests continuous location access and doesn't appear in System Settings → Privacy → Location Services.",
+  },
+  {
+    q: "Does it work with multiple monitors?",
+    a: "Yes — NightShift applies the same color temperature to every active display.",
+  },
+  {
+    q: "How do I get my screen back to normal immediately?",
+    a: "Switch to Day or Off mode from the menu bar popover, or quit the app — quitting always restores your displays to neutral first.",
+  },
+  {
+    q: "Where are my settings stored?",
+    a: "Locally on your Mac only, via UserDefaults. Nothing is synced to a server or account. See the Privacy Policy for details.",
+  },
+  {
+    q: "Does NightShift replace macOS Night Shift?",
+    a: "It's an alternative, not a companion — running both at once can fight over the same display gamma settings, so pick one.",
+  },
+];
+---
+
+<Layout
+	title="Support — NightShift"
+	description="Get help with NightShift: common questions and how to reach support."
+>
+	<article class="mx-auto max-w-2xl px-6 py-16">
+		<h1 class="text-3xl font-semibold tracking-tight text-white">Support</h1>
+		<p class="mt-3 text-slate-400">
+			Answers to common questions below. Can't find what you need? Email
+			<a href="mailto:nandanvarma.me@gmail.com" class="text-white underline underline-offset-2">nandanvarma.me@gmail.com</a>
+			and I'll get back to you.
+		</p>
+
+		<div class="mt-10 space-y-6">
+			{faqs.map((item) => (
+				<div class="rounded-xl border border-white/5 bg-night-900/50 p-6">
+					<h2 class="text-sm font-semibold text-white">{item.q}</h2>
+					<p class="mt-2 text-sm leading-relaxed text-slate-400">{item.a}</p>
+				</div>
+			))}
+		</div>
+
+		<div class="mt-12 rounded-xl border border-white/10 bg-gradient-to-br from-amber-glow/10 to-transparent p-6 text-center">
+			<h2 class="text-sm font-semibold text-white">Still stuck?</h2>
+			<p class="mt-2 text-sm text-slate-400">Send a note and a screenshot if you can — happy to help.</p>
+			<a
+				href="mailto:nandanvarma.me@gmail.com"
+				class="mt-4 inline-block rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-night-950 transition hover:bg-slate-200"
+			>
+				Email Support
+			</a>
+		</div>
+	</article>
+</Layout>
