@@ -8,7 +8,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     let gammaController = DisplayGammaController()
     private(set) lazy var scheduleEngine = ScheduleEngine(settings: settings, gammaController: gammaController)
 
-    private var reconfigDebounceWorkItem: DispatchWorkItem?
+    private var reconfigDebounceTask: Task<Void, Never>?
     private var onboardingWindow: NSWindow?
     private var sigintSource: DispatchSourceSignal?
     private var sigtermSource: DispatchSourceSignal?
@@ -76,12 +76,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     fileprivate func handleDisplayReconfiguration() {
-        reconfigDebounceWorkItem?.cancel()
-        let workItem = DispatchWorkItem { [weak self] in
+        reconfigDebounceTask?.cancel()
+        reconfigDebounceTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(0.4))
+            guard !Task.isCancelled else { return }
             self?.scheduleEngine.reapplyCurrentState()
         }
-        reconfigDebounceWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: workItem)
     }
 
     private func showOnboardingWindow() {

@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct StatusHeaderView: View {
-    @ObservedObject var settings: SettingsStore
-    @ObservedObject var scheduleEngine: ScheduleEngine
+    let settings: SettingsStore
+    let scheduleEngine: ScheduleEngine
 
     var body: some View {
         HStack(spacing: 12) {
@@ -17,11 +17,13 @@ struct StatusHeaderView: View {
                 Text(subtitle)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                if let countdown {
-                    Text(countdown)
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
+                // Always reserve this line's height, even with no countdown
+                // to show, so the header doesn't change size — and shift
+                // every row below it — as the mode or transition state changes.
+                Text(countdown ?? " ")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .opacity(countdown == nil ? 0 : 1)
             }
 
             Spacer()

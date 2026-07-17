@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct MenuBarContentView: View {
-    @ObservedObject var settings: SettingsStore
-    @ObservedObject var scheduleEngine: ScheduleEngine
+    let settings: SettingsStore
+    let scheduleEngine: ScheduleEngine
     let gammaController: DisplayGammaController
 
     var body: some View {
@@ -31,7 +31,7 @@ struct MenuBarContentView: View {
 
             HStack {
                 Text("NightShift 1.0")
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.tertiary)
                 Spacer()
                 QuitButtonView(gammaController: gammaController)

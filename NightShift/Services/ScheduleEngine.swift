@@ -1,14 +1,15 @@
 import Foundation
-import Combine
+import Observation
 
 /// Central orchestrator: ties location + solar times + settings + manual
 /// override + current time into a single "desired color temperature right
 /// now", applied to the displays on a periodic timer.
 @MainActor
-final class ScheduleEngine: ObservableObject {
-    @Published private(set) var currentKelvin: Double = 6500
-    @Published private(set) var currentPhase: SchedulePhase = .day
-    @Published private(set) var nextTransitionDate: Date?
+@Observable
+final class ScheduleEngine {
+    private(set) var currentKelvin: Double = 6500
+    private(set) var currentPhase: SchedulePhase = .day
+    private(set) var nextTransitionDate: Date?
 
     private let settings: SettingsStore
     private let gammaController: DisplayGammaController
@@ -16,7 +17,6 @@ final class ScheduleEngine: ObservableObject {
     private var todaySolarTimes: SolarTimes?
     private var todaySolarTimesLocalDay: Date?
     private var timer: Timer?
-    private var cancellables = Set<AnyCancellable>()
 
     private static let tickInterval: TimeInterval = 30
     private static let kelvinChangeThreshold: Double = 5
@@ -132,12 +132,32 @@ final class ScheduleEngine: ObservableObject {
         calendar.date(bySettingHour: 12, minute: 0, second: 0, of: now) ?? now
     }
 
+    /// `withObservationTracking`'s `onChange` fires only once per registration,
+    /// so this re-registers itself after every change to keep observing for the
+    /// lifetime of the engine — the standard pattern for reacting to an
+    /// `@Observable` object outside of a SwiftUI view body.
     private func observeSettingsChanges() {
-        settings.objectWillChange
-            .sink { [weak self] _ in
-                Task { @MainActor in self?.todaySolarTimes = nil; self?.tick() }
+        withObservationTracking {
+            // Touch every settings property `desiredKelvin` depends on, so this
+            // closure is invalidated whenever any of them changes.
+            _ = settings.scheduleMode
+            _ = settings.dayColorTemperatureKelvin
+            _ = settings.nightColorTemperatureKelvin
+            _ = settings.transitionDurationMinutes
+            _ = settings.latitude
+            _ = settings.longitude
+            _ = settings.bedtimeRampEnabled
+            _ = settings.bedtimeHour
+            _ = settings.bedtimeMinute
+            _ = settings.bedtimeColorTemperatureKelvin
+        } onChange: { [weak self] in
+            Task { @MainActor in
+                guard let self else { return }
+                self.todaySolarTimes = nil
+                self.tick()
+                self.observeSettingsChanges()
             }
-            .store(in: &cancellables)
+        }
     }
 
     // MARK: - Pure functions (no CGDisplay/CoreLocation dependency, unit-testable)

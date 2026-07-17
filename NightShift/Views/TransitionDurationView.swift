@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TransitionDurationView: View {
-    @ObservedObject var settings: SettingsStore
+    @Bindable var settings: SettingsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {

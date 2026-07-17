@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ModeControlView: View {
-    @ObservedObject var settings: SettingsStore
+    @Bindable var settings: SettingsStore
 
     var body: some View {
         Picker("Mode", selection: $settings.scheduleMode) {

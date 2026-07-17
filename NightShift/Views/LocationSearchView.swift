@@ -3,7 +3,7 @@ import SwiftUI
 /// City search + manual lat/long entry, shared between the main dashboard's
 /// location section and onboarding.
 struct LocationSearchView: View {
-    @ObservedObject var settings: SettingsStore
+    @Bindable var settings: SettingsStore
     var onResolved: (() -> Void)?
 
     @State private var citySearchText = ""

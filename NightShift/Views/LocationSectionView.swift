@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LocationSectionView: View {
-    @ObservedObject var settings: SettingsStore
+    let settings: SettingsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

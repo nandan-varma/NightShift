@@ -1,9 +1,10 @@
 import Foundation
-import Combine
+import Observation
 
 /// UserDefaults-backed store of all user-configurable preferences.
-/// Each property publishes changes (for SwiftUI) and persists immediately on set.
-final class SettingsStore: ObservableObject {
+/// Each property is Observation-tracked (for SwiftUI) and persists immediately on set.
+@Observable
+final class SettingsStore {
     private enum Key {
         static let dayColorTemperatureKelvin = "dayColorTemperatureKelvin"
         static let nightColorTemperatureKelvin = "nightColorTemperatureKelvin"
@@ -22,58 +23,58 @@ final class SettingsStore: ObservableObject {
 
     private let defaults: UserDefaults
 
-    @Published var dayColorTemperatureKelvin: Double {
+    var dayColorTemperatureKelvin: Double {
         didSet { defaults.set(dayColorTemperatureKelvin, forKey: Key.dayColorTemperatureKelvin) }
     }
 
-    @Published var nightColorTemperatureKelvin: Double {
+    var nightColorTemperatureKelvin: Double {
         didSet { defaults.set(nightColorTemperatureKelvin, forKey: Key.nightColorTemperatureKelvin) }
     }
 
-    @Published var transitionDurationMinutes: Double {
+    var transitionDurationMinutes: Double {
         didSet { defaults.set(transitionDurationMinutes, forKey: Key.transitionDurationMinutes) }
     }
 
-    @Published var scheduleMode: ScheduleMode {
+    var scheduleMode: ScheduleMode {
         didSet { defaults.set(scheduleMode.rawValue, forKey: Key.scheduleMode) }
     }
 
-    @Published var latitude: Double {
+    var latitude: Double {
         didSet { defaults.set(latitude, forKey: Key.latitude) }
     }
 
-    @Published var longitude: Double {
+    var longitude: Double {
         didSet { defaults.set(longitude, forKey: Key.longitude) }
     }
 
-    @Published var locationName: String {
+    var locationName: String {
         didSet { defaults.set(locationName, forKey: Key.locationName) }
     }
 
-    @Published var launchAtLoginEnabled: Bool {
+    var launchAtLoginEnabled: Bool {
         didSet { defaults.set(launchAtLoginEnabled, forKey: Key.launchAtLoginEnabled) }
     }
 
-    @Published var hasCompletedOnboarding: Bool {
+    var hasCompletedOnboarding: Bool {
         didSet { defaults.set(hasCompletedOnboarding, forKey: Key.hasCompletedOnboarding) }
     }
 
     /// Opt-in: gradually warms further over the hour before `bedtimeHour:bedtimeMinute`,
     /// down to `bedtimeColorTemperatureKelvin` — the pre-sleep window is where color
     /// temperature matters most for melatonin, and it rarely lines up with sunset.
-    @Published var bedtimeRampEnabled: Bool {
+    var bedtimeRampEnabled: Bool {
         didSet { defaults.set(bedtimeRampEnabled, forKey: Key.bedtimeRampEnabled) }
     }
 
-    @Published var bedtimeHour: Int {
+    var bedtimeHour: Int {
         didSet { defaults.set(bedtimeHour, forKey: Key.bedtimeHour) }
     }
 
-    @Published var bedtimeMinute: Int {
+    var bedtimeMinute: Int {
         didSet { defaults.set(bedtimeMinute, forKey: Key.bedtimeMinute) }
     }
 
-    @Published var bedtimeColorTemperatureKelvin: Double {
+    var bedtimeColorTemperatureKelvin: Double {
         didSet { defaults.set(bedtimeColorTemperatureKelvin, forKey: Key.bedtimeColorTemperatureKelvin) }
     }
 

@@ -6,7 +6,7 @@ import Foundation
 enum SolarCalculator {
     static func sunriseSunset(for date: Date, latitude: Double, longitude: Double, calendar: Calendar = .init(identifier: .gregorian)) -> SolarTimes {
         var utcCalendar = calendar
-        utcCalendar.timeZone = TimeZone(identifier: "UTC")!
+        utcCalendar.timeZone = .gmt
 
         let startOfDayUTC = utcCalendar.startOfDay(for: date)
         let julianDay = julianDay(for: startOfDayUTC) + 0.5 // solar calc is referenced to local noon

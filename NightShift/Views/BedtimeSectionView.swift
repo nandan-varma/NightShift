@@ -4,7 +4,7 @@ import SwiftUI
 /// regular sunset/sunrise schedule — the pre-sleep window matters most for
 /// melatonin, and it rarely lines up with sunset. Off by default.
 struct BedtimeSectionView: View {
-    @ObservedObject var settings: SettingsStore
+    @Bindable var settings: SettingsStore
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -19,6 +19,7 @@ struct BedtimeSectionView: View {
                     Spacer()
                     DatePicker("", selection: bedtimeBinding, displayedComponents: .hourAndMinute)
                         .labelsHidden()
+                        .accessibilityLabel("Bedtime")
                         .datePickerStyle(.compact)
                 }
 
@@ -43,8 +44,9 @@ struct BedtimeSectionView: View {
                 }
 
                 Text("Gradually warms further over the hour before bedtime — the window that matters most for melatonin.")
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.tertiary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }

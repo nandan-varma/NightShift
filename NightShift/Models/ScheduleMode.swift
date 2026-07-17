@@ -10,10 +10,10 @@ enum ScheduleMode: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .auto: return "Auto"
-        case .forceDay: return "Day"
-        case .forceNight: return "Night"
-        case .off: return "Off"
+        case .auto: "Auto"
+        case .forceDay: "Day"
+        case .forceNight: "Night"
+        case .off: "Off"
         }
     }
 }

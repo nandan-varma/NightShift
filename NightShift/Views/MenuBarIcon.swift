@@ -3,20 +3,30 @@ import AppKit
 
 struct MenuBarIcon: View {
     let phase: SchedulePhase
-    @ObservedObject var settings: SettingsStore
+    let settings: SettingsStore
     let gammaController: DisplayGammaController
 
     var body: some View {
         Image(systemName: symbolName)
+            .accessibilityLabel(accessibilityDescription)
             .overlay(MenuBarContextMenuCatcher(settings: settings, gammaController: gammaController))
     }
 
     private var symbolName: String {
         switch phase {
-        case .day: return "sun.max.fill"
-        case .night: return "moon.fill"
-        case .transitioningToNight, .transitioningToDay: return "sun.haze.fill"
-        case .off: return "circle.slash"
+        case .day: "sun.max.fill"
+        case .night: "moon.fill"
+        case .transitioningToNight, .transitioningToDay: "sun.haze.fill"
+        case .off: "circle.slash"
+        }
+    }
+
+    private var accessibilityDescription: String {
+        switch phase {
+        case .day: "Night Shift: Day"
+        case .night: "Night Shift: Night"
+        case .transitioningToNight, .transitioningToDay: "Night Shift: Transitioning"
+        case .off: "Night Shift: Off"
         }
     }
 }
@@ -27,7 +37,7 @@ struct MenuBarIcon: View {
 /// status item's private button window) and pops up a standard AppKit menu
 /// instead, without disturbing the label's normal left-click behavior.
 private struct MenuBarContextMenuCatcher: NSViewRepresentable {
-    @ObservedObject var settings: SettingsStore
+    let settings: SettingsStore
     let gammaController: DisplayGammaController
 
     func makeNSView(context: Context) -> NSView {
@@ -98,9 +108,8 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
             ) { [weak self] in
                 Task { @MainActor in
                     guard let self else { return }
-                    let enabled = !self.settings.launchAtLoginEnabled
-                    LaunchAtLoginService.setEnabled(enabled)
-                    self.settings.launchAtLoginEnabled = enabled
+                    let requested = !self.settings.launchAtLoginEnabled
+                    self.settings.launchAtLoginEnabled = LaunchAtLoginService.setEnabled(requested)
                 }
             })
 
