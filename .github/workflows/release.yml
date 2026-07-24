@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+# The workflow needs no long-lived credentials. The ephemeral token may only
+# create the release and upload its assets.
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - name: Check out the tagged source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Build unsigned release archive
+        env:
+          RELEASE_VERSION: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          RELEASE_VERSION="${RELEASE_VERSION#v}"
+          xcodebuild \
+            -project NightShift.xcodeproj \
+            -scheme NightShift \
+            -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/NightShift-derived-data" \
+            MARKETING_VERSION="$RELEASE_VERSION" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
+
+          mkdir -p dist
+          ditto -c -k --sequesterRsrc --keepParent \
+            "$RUNNER_TEMP/NightShift-derived-data/Build/Products/Release/NightShift.app" \
+            "dist/NightShift-${RELEASE_VERSION}-macos.zip"
+          shasum -a 256 "dist/NightShift-${RELEASE_VERSION}-macos.zip" \
+            > "dist/NightShift-${RELEASE_VERSION}-macos.zip.sha256"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --verify-tag \
+            --title "NightShift $GITHUB_REF_NAME" \
+            --generate-notes
