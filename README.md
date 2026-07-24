@@ -25,6 +25,13 @@ Solar position is computed fully offline (NOAA low-precision formulas); the only
 - macOS 14+
 - Xcode 15+
 
+## Releases
+
+Tagged releases are packaged as signed, notarized, stapled `.dmg` files and
+include a SHA-256 checksum. The release workflow uses repository secrets for a
+Developer ID Application certificate and an App Store Connect API key; no
+signing material is committed to the repository.
+
 ## Built with
 
 - Swift + SwiftUI (`MenuBarExtra`) + AppKit
