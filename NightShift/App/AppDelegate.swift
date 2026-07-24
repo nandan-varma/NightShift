@@ -3,6 +3,7 @@ import SwiftUI
 import CoreGraphics
 import Darwin
 
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     let settings = SettingsStore()
     let gammaController = DisplayGammaController()
@@ -110,8 +111,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
 /// Monitor hot-plug/mode changes reset per-display transfer functions;
 /// debounce and reapply the current Kelvin value when this fires.
-private func displayReconfigurationCallback(display: CGDirectDisplayID, flags: CGDisplayChangeSummaryFlags, userInfo: UnsafeMutableRawPointer?) {
+private nonisolated func displayReconfigurationCallback(display: CGDirectDisplayID, flags: CGDisplayChangeSummaryFlags, userInfo: UnsafeMutableRawPointer?) {
     guard let userInfo else { return }
     let delegate = Unmanaged<AppDelegate>.fromOpaque(userInfo).takeUnretainedValue()
-    delegate.handleDisplayReconfiguration()
+    Task { @MainActor in
+        delegate.handleDisplayReconfiguration()
+    }
 }
