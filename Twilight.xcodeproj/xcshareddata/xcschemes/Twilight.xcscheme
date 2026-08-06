@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A21E11F63009535B00D36661"
-               BuildableName = "NightShift.app"
-               BlueprintName = "NightShift"
-               ReferencedContainer = "container:NightShift.xcodeproj">
+               BuildableName = "Twilight.app"
+               BlueprintName = "Twilight"
+               ReferencedContainer = "container:Twilight.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,9 +34,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A21E12033009535C00D36661"
-               BuildableName = "NightShiftTests.xctest"
-               BlueprintName = "NightShiftTests"
-               ReferencedContainer = "container:NightShift.xcodeproj">
+               BuildableName = "TwilightTests.xctest"
+               BlueprintName = "TwilightTests"
+               ReferencedContainer = "container:Twilight.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -44,9 +44,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A21E120D3009535C00D36661"
-               BuildableName = "NightShiftUITests.xctest"
-               BlueprintName = "NightShiftUITests"
-               ReferencedContainer = "container:NightShift.xcodeproj">
+               BuildableName = "TwilightUITests.xctest"
+               BlueprintName = "TwilightUITests"
+               ReferencedContainer = "container:Twilight.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -66,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A21E11F63009535B00D36661"
-            BuildableName = "NightShift.app"
-            BlueprintName = "NightShift"
-            ReferencedContainer = "container:NightShift.xcodeproj">
+            BuildableName = "Twilight.app"
+            BlueprintName = "Twilight"
+            ReferencedContainer = "container:Twilight.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -83,9 +83,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A21E11F63009535B00D36661"
-            BuildableName = "NightShift.app"
-            BlueprintName = "NightShift"
-            ReferencedContainer = "container:NightShift.xcodeproj">
+            BuildableName = "Twilight.app"
+            BlueprintName = "Twilight"
+            ReferencedContainer = "container:Twilight.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

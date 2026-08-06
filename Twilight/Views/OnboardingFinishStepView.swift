@@ -13,7 +13,7 @@ struct OnboardingFinishStepView: View {
             Text("You're All Set")
                 .font(.title2.bold())
 
-            Text("NightShift runs quietly in your menu bar. Click the sun or moon icon anytime to adjust temperatures, location, or scheduling.")
+            Text("Twilight runs quietly in your menu bar. Click the sun or moon icon anytime to adjust temperatures, location, or scheduling.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

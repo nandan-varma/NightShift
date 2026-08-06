@@ -1,11 +1,11 @@
 import Testing
 import Foundation
-@testable import NightShift
+@testable import Twilight
 
 @MainActor
 struct BedtimeTaperTests {
     private func makeSettings(bedtimeHour: Int = 23, bedtimeMinute: Int = 0, bedtimeKelvin: Double = 2300, enabled: Bool = true) -> SettingsStore {
-        let suiteName = "com.nandanvarma.NightShift.tests.\(UUID().uuidString)"
+        let suiteName = "com.nandanvarma.Twilight.tests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
         defaults.removePersistentDomain(forName: suiteName)
         let store = SettingsStore(defaults: defaults)

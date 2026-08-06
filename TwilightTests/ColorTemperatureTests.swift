@@ -1,5 +1,5 @@
 import Testing
-@testable import NightShift
+@testable import Twilight
 
 struct ColorTemperatureTests {
     @Test func neutralDaylightIsApproximatelyFullGainOnAllChannels() {

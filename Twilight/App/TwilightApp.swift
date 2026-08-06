@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct NightShiftApp: App {
+struct TwilightApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {

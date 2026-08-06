@@ -1,10 +1,10 @@
 import Testing
 import Foundation
-@testable import NightShift
+@testable import Twilight
 
 struct SettingsStoreTests {
     private func makeIsolatedDefaults() -> UserDefaults {
-        let suiteName = "com.nandanvarma.NightShift.tests.\(UUID().uuidString)"
+        let suiteName = "com.nandanvarma.Twilight.tests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
         defaults.removePersistentDomain(forName: suiteName)
         return defaults

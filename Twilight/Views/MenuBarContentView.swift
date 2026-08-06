@@ -30,7 +30,7 @@ struct MenuBarContentView: View {
             Divider()
 
             HStack {
-                Text("NightShift 1.0")
+                Text("Twilight 1.0")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                 Spacer()

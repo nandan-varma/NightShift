@@ -1,13 +1,13 @@
 //
-//  NightShiftUITests.swift
-//  NightShiftUITests
+//  TwilightUITests.swift
+//  TwilightUITests
 //
 //  Created by Nandan Varma Pericharla on 7/16/26.
 //
 
 import XCTest
 
-final class NightShiftUITests: XCTestCase {
+final class TwilightUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

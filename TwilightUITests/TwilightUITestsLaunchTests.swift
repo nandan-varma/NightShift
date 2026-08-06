@@ -1,13 +1,13 @@
 //
-//  NightShiftUITestsLaunchTests.swift
-//  NightShiftUITests
+//  TwilightUITestsLaunchTests.swift
+//  TwilightUITests
 //
 //  Created by Nandan Varma Pericharla on 7/16/26.
 //
 
 import XCTest
 
-final class NightShiftUITestsLaunchTests: XCTestCase {
+final class TwilightUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

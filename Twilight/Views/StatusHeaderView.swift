@@ -41,10 +41,10 @@ struct StatusHeaderView: View {
 
     private var title: String {
         switch settings.scheduleMode {
-        case .off: return "Night Shift: Off"
-        case .auto: return "Night Shift: Scheduled"
-        case .forceDay: return "Night Shift: Day"
-        case .forceNight: return "Night Shift: Night"
+        case .off: return "Twilight: Off"
+        case .auto: return "Twilight: Scheduled"
+        case .forceDay: return "Twilight: Day"
+        case .forceNight: return "Twilight: Night"
         }
     }
 

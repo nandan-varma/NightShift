@@ -91,7 +91,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
 
         let window = NSWindow(contentViewController: NSHostingController(rootView: onboarding))
-        window.title = "Welcome to NightShift"
+        window.title = "Welcome to Twilight"
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
         window.delegate = self

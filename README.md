@@ -1,4 +1,4 @@
-# NightShift
+# Twilight
 
 A native macOS menu-bar app (f.lux / Night Shift-style) that warms display color temperature on a sunrise/sunset schedule, with an opt-in bedtime wind-down taper. Zero external dependencies — no SPM packages, no CocoaPods — everything runs on AppKit, SwiftUI, CoreGraphics, and CoreLocation.
 
@@ -16,7 +16,7 @@ The schedule engine's core functions (`interpolatedKelvin`, `phase`, `nextTransi
 
 The sunrise/sunset transition is a smoothstep-eased window centered on the solar event, not a linear ramp. A separate opt-in bedtime taper layers on top and only ever makes auto mode warmer — it never overrides forced day/night/off modes.
 
-macOS silently resets display transfer functions on both external-display reconfiguration and wake-from-sleep. NightShift re-applies state on both events (debounced via a cancellable `Task`) and guarantees `restoreNeutral()` fires on quit, SIGINT/SIGTERM, and both UI quit affordances, so a display can never get stuck warm.
+macOS silently resets display transfer functions on both external-display reconfiguration and wake-from-sleep. Twilight re-applies state on both events (debounced via a cancellable `Task`) and guarantees `restoreNeutral()` fires on quit, SIGINT/SIGTERM, and both UI quit affordances, so a display can never get stuck warm.
 
 Solar position is computed fully offline (NOAA low-precision formulas); the only network-adjacent call is a one-time `CLGeocoder` lookup during manual location entry.
 

@@ -1,11 +1,11 @@
 import Testing
 import Foundation
-@testable import NightShift
+@testable import Twilight
 
 @MainActor
 struct ScheduleEngineTests {
     private func makeSettings(day: Double = 6500, night: Double = 3400, transitionMinutes: Double = 30) -> SettingsStore {
-        let suiteName = "com.nandanvarma.NightShift.tests.\(UUID().uuidString)"
+        let suiteName = "com.nandanvarma.Twilight.tests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
         defaults.removePersistentDomain(forName: suiteName)
         let store = SettingsStore(defaults: defaults)

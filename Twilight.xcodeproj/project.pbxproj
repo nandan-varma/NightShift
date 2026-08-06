@@ -12,37 +12,37 @@
 			containerPortal = A21E11EF3009535B00D36661 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A21E11F63009535B00D36661;
-			remoteInfo = NightShift;
+			remoteInfo = Twilight;
 		};
 		A21E120F3009535C00D36661 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A21E11EF3009535B00D36661 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A21E11F63009535B00D36661;
-			remoteInfo = NightShift;
+			remoteInfo = Twilight;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A21E11F73009535B00D36661 /* NightShift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NightShift.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A21E12043009535C00D36661 /* NightShiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightShiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A21E120E3009535C00D36661 /* NightShiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NightShiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A21E11F73009535B00D36661 /* Twilight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twilight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A21E12043009535C00D36661 /* TwilightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwilightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A21E120E3009535C00D36661 /* TwilightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwilightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A21E11F93009535B00D36661 /* NightShift */ = {
+		A21E11F93009535B00D36661 /* Twilight */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NightShift;
+			path = Twilight;
 			sourceTree = "<group>";
 		};
-		A21E12073009535C00D36661 /* NightShiftTests */ = {
+		A21E12073009535C00D36661 /* TwilightTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NightShiftTests;
+			path = TwilightTests;
 			sourceTree = "<group>";
 		};
-		A21E12113009535C00D36661 /* NightShiftUITests */ = {
+		A21E12113009535C00D36661 /* TwilightUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NightShiftUITests;
+			path = TwilightUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +75,9 @@
 		A21E11EE3009535B00D36661 = {
 			isa = PBXGroup;
 			children = (
-				A21E11F93009535B00D36661 /* NightShift */,
-				A21E12073009535C00D36661 /* NightShiftTests */,
-				A21E12113009535C00D36661 /* NightShiftUITests */,
+				A21E11F93009535B00D36661 /* Twilight */,
+				A21E12073009535C00D36661 /* TwilightTests */,
+				A21E12113009535C00D36661 /* TwilightUITests */,
 				A21E11F83009535B00D36661 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,9 +85,9 @@
 		A21E11F83009535B00D36661 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A21E11F73009535B00D36661 /* NightShift.app */,
-				A21E12043009535C00D36661 /* NightShiftTests.xctest */,
-				A21E120E3009535C00D36661 /* NightShiftUITests.xctest */,
+				A21E11F73009535B00D36661 /* Twilight.app */,
+				A21E12043009535C00D36661 /* TwilightTests.xctest */,
+				A21E120E3009535C00D36661 /* TwilightUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A21E11F63009535B00D36661 /* NightShift */ = {
+		A21E11F63009535B00D36661 /* Twilight */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A21E12183009535C00D36661 /* Build configuration list for PBXNativeTarget "NightShift" */;
+			buildConfigurationList = A21E12183009535C00D36661 /* Build configuration list for PBXNativeTarget "Twilight" */;
 			buildPhases = (
 				A21E11F33009535B00D36661 /* Sources */,
 				A21E11F43009535B00D36661 /* Frameworks */,
@@ -108,18 +108,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A21E11F93009535B00D36661 /* NightShift */,
+				A21E11F93009535B00D36661 /* Twilight */,
 			);
-			name = NightShift;
+			name = Twilight;
 			packageProductDependencies = (
 			);
-			productName = NightShift;
-			productReference = A21E11F73009535B00D36661 /* NightShift.app */;
+			productName = Twilight;
+			productReference = A21E11F73009535B00D36661 /* Twilight.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A21E12033009535C00D36661 /* NightShiftTests */ = {
+		A21E12033009535C00D36661 /* TwilightTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A21E121B3009535C00D36661 /* Build configuration list for PBXNativeTarget "NightShiftTests" */;
+			buildConfigurationList = A21E121B3009535C00D36661 /* Build configuration list for PBXNativeTarget "TwilightTests" */;
 			buildPhases = (
 				A21E12003009535C00D36661 /* Sources */,
 				A21E12013009535C00D36661 /* Frameworks */,
@@ -131,18 +131,18 @@
 				A21E12063009535C00D36661 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A21E12073009535C00D36661 /* NightShiftTests */,
+				A21E12073009535C00D36661 /* TwilightTests */,
 			);
-			name = NightShiftTests;
+			name = TwilightTests;
 			packageProductDependencies = (
 			);
-			productName = NightShiftTests;
-			productReference = A21E12043009535C00D36661 /* NightShiftTests.xctest */;
+			productName = TwilightTests;
+			productReference = A21E12043009535C00D36661 /* TwilightTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A21E120D3009535C00D36661 /* NightShiftUITests */ = {
+		A21E120D3009535C00D36661 /* TwilightUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A21E121E3009535C00D36661 /* Build configuration list for PBXNativeTarget "NightShiftUITests" */;
+			buildConfigurationList = A21E121E3009535C00D36661 /* Build configuration list for PBXNativeTarget "TwilightUITests" */;
 			buildPhases = (
 				A21E120A3009535C00D36661 /* Sources */,
 				A21E120B3009535C00D36661 /* Frameworks */,
@@ -154,13 +154,13 @@
 				A21E12103009535C00D36661 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A21E12113009535C00D36661 /* NightShiftUITests */,
+				A21E12113009535C00D36661 /* TwilightUITests */,
 			);
-			name = NightShiftUITests;
+			name = TwilightUITests;
 			packageProductDependencies = (
 			);
-			productName = NightShiftUITests;
-			productReference = A21E120E3009535C00D36661 /* NightShiftUITests.xctest */;
+			productName = TwilightUITests;
+			productReference = A21E120E3009535C00D36661 /* TwilightUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A21E11F23009535B00D36661 /* Build configuration list for PBXProject "NightShift" */;
+			buildConfigurationList = A21E11F23009535B00D36661 /* Build configuration list for PBXProject "Twilight" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +200,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A21E11F63009535B00D36661 /* NightShift */,
-				A21E12033009535C00D36661 /* NightShiftTests */,
-				A21E120D3009535C00D36661 /* NightShiftUITests */,
+				A21E11F63009535B00D36661 /* Twilight */,
+				A21E12033009535C00D36661 /* TwilightTests */,
+				A21E120D3009535C00D36661 /* TwilightUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		A21E12063009535C00D36661 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A21E11F63009535B00D36661 /* NightShift */;
+			target = A21E11F63009535B00D36661 /* Twilight */;
 			targetProxy = A21E12053009535C00D36661 /* PBXContainerItemProxy */;
 		};
 		A21E12103009535C00D36661 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A21E11F63009535B00D36661 /* NightShift */;
+			target = A21E11F63009535B00D36661 /* Twilight */;
 			targetProxy = A21E120F3009535C00D36661 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -394,7 +394,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = NightShift/NightShift.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Twilight/Twilight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -428,7 +428,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = NightShift/NightShift.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Twilight/Twilight.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -475,7 +475,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NightShift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NightShift";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Twilight.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Twilight";
 			};
 			name = Debug;
 		};
@@ -496,7 +496,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NightShift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NightShift";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Twilight.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Twilight";
 			};
 			name = Release;
 		};
@@ -515,7 +515,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = NightShift;
+				TEST_TARGET_NAME = Twilight;
 			};
 			name = Debug;
 		};
@@ -534,14 +534,14 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = NightShift;
+				TEST_TARGET_NAME = Twilight;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A21E11F23009535B00D36661 /* Build configuration list for PBXProject "NightShift" */ = {
+		A21E11F23009535B00D36661 /* Build configuration list for PBXProject "Twilight" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A21E12163009535C00D36661 /* Debug */,
@@ -550,7 +550,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A21E12183009535C00D36661 /* Build configuration list for PBXNativeTarget "NightShift" */ = {
+		A21E12183009535C00D36661 /* Build configuration list for PBXNativeTarget "Twilight" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A21E12193009535C00D36661 /* Debug */,
@@ -559,7 +559,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A21E121B3009535C00D36661 /* Build configuration list for PBXNativeTarget "NightShiftTests" */ = {
+		A21E121B3009535C00D36661 /* Build configuration list for PBXNativeTarget "TwilightTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A21E121C3009535C00D36661 /* Debug */,
@@ -568,7 +568,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A21E121E3009535C00D36661 /* Build configuration list for PBXNativeTarget "NightShiftUITests" */ = {
+		A21E121E3009535C00D36661 /* Build configuration list for PBXNativeTarget "TwilightUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A21E121F3009535C00D36661 /* Debug */,

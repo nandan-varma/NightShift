@@ -23,10 +23,10 @@ struct MenuBarIcon: View {
 
     private var accessibilityDescription: String {
         switch phase {
-        case .day: "Night Shift: Day"
-        case .night: "Night Shift: Night"
-        case .transitioningToNight, .transitioningToDay: "Night Shift: Transitioning"
-        case .off: "Night Shift: Off"
+        case .day: "Twilight: Day"
+        case .night: "Twilight: Night"
+        case .transitioningToNight, .transitioningToDay: "Twilight: Transitioning"
+        case .off: "Twilight: Off"
         }
     }
 }
@@ -115,7 +115,7 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
 
             menu.addItem(.separator())
 
-            menu.addItem(ClosureMenuItem(title: "Quit NightShift") { [weak self] in
+            menu.addItem(ClosureMenuItem(title: "Quit Twilight") { [weak self] in
                 Task { @MainActor in
                     self?.gammaController.restoreNeutral()
                     NSApp.terminate(nil)

@@ -71,7 +71,7 @@ jobs:
           set -euo pipefail
           gh release create "$GITHUB_REF_NAME" dist/* \
             --verify-tag \
-            --title "NightShift $GITHUB_REF_NAME" \
+            --title "Twilight $GITHUB_REF_NAME" \
             --generate-notes
 
       - name: Remove signing material

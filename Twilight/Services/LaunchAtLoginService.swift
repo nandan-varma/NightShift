@@ -3,7 +3,7 @@ import ServiceManagement
 
 /// Wraps SMAppService.mainApp for the "Launch at Login" toggle.
 enum LaunchAtLoginService {
-    private static let logger = Logger(subsystem: "com.nandanvarma.NightShift", category: "LaunchAtLogin")
+    private static let logger = Logger(subsystem: "com.nandanvarma.Twilight", category: "LaunchAtLogin")
 
     static var isEnabled: Bool {
         SMAppService.mainApp.status == .enabled

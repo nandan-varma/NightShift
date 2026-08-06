@@ -8,7 +8,7 @@ set -euo pipefail
 : "${APPLE_API_KEY_PATH:?Missing APPLE_API_KEY_PATH}"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BUILD_DIR="${RUNNER_TEMP:-$ROOT_DIR}/nightshift-release-${GITHUB_RUN_ID:-local}"
+BUILD_DIR="${RUNNER_TEMP:-$ROOT_DIR}/twilight-release-${GITHUB_RUN_ID:-local}"
 VERSION="${VERSION:?Missing VERSION}"
 
 rm -rf "$BUILD_DIR"
@@ -16,25 +16,25 @@ mkdir -p "$BUILD_DIR"
 
 echo "==> Archive"
 xcodebuild \
-  -project "$ROOT_DIR/NightShift.xcodeproj" \
-  -scheme NightShift \
+  -project "$ROOT_DIR/Twilight.xcodeproj" \
+  -scheme Twilight \
   -configuration Release \
-  -archivePath "$BUILD_DIR/NightShift.xcarchive" \
+  -archivePath "$BUILD_DIR/Twilight.xcarchive" \
   MARKETING_VERSION="$VERSION" \
   archive
 
 echo "==> Export Developer ID app"
 xcodebuild -exportArchive \
-  -archivePath "$BUILD_DIR/NightShift.xcarchive" \
+  -archivePath "$BUILD_DIR/Twilight.xcarchive" \
   -exportPath "$BUILD_DIR/export" \
   -exportOptionsPlist "$ROOT_DIR/scripts/ExportOptions.plist"
 
-APP_PATH="$BUILD_DIR/export/NightShift.app"
+APP_PATH="$BUILD_DIR/export/Twilight.app"
 test -d "$APP_PATH"
 
 echo "==> Notarize app"
-ditto -c -k --keepParent "$APP_PATH" "$BUILD_DIR/NightShift.zip"
-xcrun notarytool submit "$BUILD_DIR/NightShift.zip" \
+ditto -c -k --keepParent "$APP_PATH" "$BUILD_DIR/Twilight.zip"
+xcrun notarytool submit "$BUILD_DIR/Twilight.zip" \
   --key "$APPLE_API_KEY_PATH" \
   --key-id "$APPLE_API_KEY_ID" \
   --issuer "$APPLE_API_ISSUER_ID" \
@@ -51,8 +51,8 @@ mkdir -p "$STAGING_DIR"
 cp -R "$APP_PATH" "$STAGING_DIR/"
 ln -s /Applications "$STAGING_DIR/Applications"
 
-DMG_PATH="$BUILD_DIR/NightShift-${VERSION}-macos.dmg"
-hdiutil create -volname "NightShift" -srcfolder "$STAGING_DIR" -ov -format UDZO "$DMG_PATH"
+DMG_PATH="$BUILD_DIR/Twilight-${VERSION}-macos.dmg"
+hdiutil create -volname "Twilight" -srcfolder "$STAGING_DIR" -ov -format UDZO "$DMG_PATH"
 xcrun notarytool submit "$DMG_PATH" \
   --key "$APPLE_API_KEY_PATH" \
   --key-id "$APPLE_API_KEY_ID" \

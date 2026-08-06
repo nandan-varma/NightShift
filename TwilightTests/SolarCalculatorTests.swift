@@ -1,6 +1,6 @@
 import Testing
 import Foundation
-@testable import NightShift
+@testable import Twilight
 
 struct SolarCalculatorTests {
     private var utc: Calendar {

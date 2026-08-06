@@ -20,10 +20,10 @@ struct OnboardingWelcomeStepView: View {
                     .foregroundStyle(.white)
             }
 
-            Text("Welcome to NightShift")
+            Text("Welcome to Twilight")
                 .font(.title2.bold())
 
-            Text("NightShift automatically warms your display's colors after sunset and returns to normal after sunrise — easier on your eyes, with nothing to toggle by hand.")
+            Text("Twilight automatically warms your display's colors after sunset and returns to normal after sunrise — easier on your eyes, with nothing to toggle by hand.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

@@ -5,7 +5,7 @@ struct QuitButtonView: View {
     let gammaController: DisplayGammaController
 
     var body: some View {
-        Button("Quit NightShift") {
+        Button("Quit Twilight") {
             gammaController.restoreNeutral()
             NSApp.terminate(nil)
         }

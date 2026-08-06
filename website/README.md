@@ -1,6 +1,6 @@
-# nightshift-website
+# twilight-website
 
-Marketing site for NightShift — landing page, Privacy Policy, Support, and Terms of Use. Built with [Astro](https://astro.build) + Tailwind CSS v4, static output, zero JS framework.
+Marketing site for Twilight — landing page, Privacy Policy, Support, and Terms of Use. Built with [Astro](https://astro.build) + Tailwind CSS v4, static output, zero JS framework.
 
 ## Develop
 

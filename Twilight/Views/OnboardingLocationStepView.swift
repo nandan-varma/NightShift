@@ -13,7 +13,7 @@ struct OnboardingLocationStepView: View {
             Text("Set Your Location")
                 .font(.title2.bold())
 
-            Text("NightShift needs your city (or coordinates) to calculate accurate sunrise and sunset times for your area. This stays on this Mac.")
+            Text("Twilight needs your city (or coordinates) to calculate accurate sunrise and sunset times for your area. This stays on this Mac.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
