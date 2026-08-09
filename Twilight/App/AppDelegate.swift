@@ -5,7 +5,17 @@ import Darwin
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
-    let settings = SettingsStore()
+    /// Shared instance for App Intents (which can launch the app in the
+    /// background before the SwiftUI lifecycle hooks are wired up).
+    private(set) static weak var shared: AppDelegate?
+
+    /// Persisted flag: cleared at launch, set again only on a clean quit. A
+    /// crash leaves it cleared, so the next launch knows to restore the
+    /// display to neutral before re-applying state — otherwise a hard kill
+    /// would leave the screen warm until reboot or relaunch.
+    private static let terminatedCleanlyKey = "terminatedCleanly"
+
+    let settings = SettingsStore.shared
     let gammaController = DisplayGammaController()
     private(set) lazy var scheduleEngine = ScheduleEngine(settings: settings, gammaController: gammaController)
 
@@ -15,9 +25,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private var sigtermSource: DispatchSourceSignal?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        Self.shared = self
         NSApp.setActivationPolicy(.accessory)
 
         installSignalHandlers()
+
+        // A cleared flag means the previous session died without quitting
+        // cleanly (crash / force-quit), which can leave the transfer function
+        // warm on some displays — un-stick it before scheduling takes over.
+        let defaults = UserDefaults.standard
+        if !defaults.bool(forKey: Self.terminatedCleanlyKey) {
+            gammaController.restoreNeutral()
+        }
+        defaults.set(false, forKey: Self.terminatedCleanlyKey)
 
         CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallback, Unmanaged.passUnretained(self).toOpaque())
 
@@ -36,6 +56,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        UserDefaults.standard.set(true, forKey: Self.terminatedCleanlyKey)
         scheduleEngine.stop()
         gammaController.restoreNeutral()
         CGDisplayRemoveReconfigurationCallback(displayReconfigurationCallback, Unmanaged.passUnretained(self).toOpaque())

@@ -26,6 +26,47 @@ struct SettingsStoreTests {
         #expect(store.bedtimeColorTemperatureKelvin == 2300)
     }
 
+    @Test func newFeatureDefaultsMatchDocumentedValues() {
+        let store = SettingsStore(defaults: makeIsolatedDefaults())
+
+        #expect(store.wakeRampEnabled == false)
+        #expect(store.wakeHour == 7)
+        #expect(store.wakeMinute == 0)
+        #expect(store.suspendUntil == nil)
+        #expect(store.customWarmStartHour == 22)
+        #expect(store.customWarmStartMinute == 0)
+        #expect(store.customWarmEndHour == 6)
+        #expect(store.customWarmEndMinute == 0)
+        #expect(store.menuBarIconName == "")
+        #expect(store.displayOffsets.isEmpty)
+    }
+
+    @Test func suspendAndCustomSchedulePersistAcrossInstances() {
+        let defaults = makeIsolatedDefaults()
+
+        let first = SettingsStore(defaults: defaults)
+        let until = Date(timeIntervalSince1970: 1_800_000_000)
+        first.suspendUntil = until
+        first.customWarmStartHour = 21
+        first.customWarmStartMinute = 30
+        first.displayOffsets = ["abc": -300]
+
+        let second = SettingsStore(defaults: defaults)
+        #expect(second.suspendUntil == until)
+        #expect(second.customWarmStartHour == 21)
+        #expect(second.customWarmStartMinute == 30)
+        #expect(second.displayOffsets == ["abc": -300])
+    }
+
+    @Test func changingModeClearsAnActiveSuspension() {
+        let store = SettingsStore(defaults: makeIsolatedDefaults())
+        store.suspendUntil = Date().addingTimeInterval(3600)
+        #expect(store.suspendUntil != nil)
+
+        store.scheduleMode = .forceNight
+        #expect(store.suspendUntil == nil)
+    }
+
     @Test func changesPersistAcrossInstancesSharingTheSameDefaults() {
         let defaults = makeIsolatedDefaults()
 

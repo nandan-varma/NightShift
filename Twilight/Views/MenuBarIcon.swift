@@ -5,19 +5,27 @@ struct MenuBarIcon: View {
     let phase: SchedulePhase
     let settings: SettingsStore
     let gammaController: DisplayGammaController
+    let scheduleEngine: ScheduleEngine
 
     var body: some View {
         Image(systemName: symbolName)
             .accessibilityLabel(accessibilityDescription)
-            .overlay(MenuBarContextMenuCatcher(settings: settings, gammaController: gammaController))
+            .overlay(MenuBarContextMenuCatcher(
+                settings: settings,
+                gammaController: gammaController,
+                scheduleEngine: scheduleEngine
+            ))
     }
 
     private var symbolName: String {
+        if !settings.menuBarIconName.isEmpty {
+            return settings.menuBarIconName
+        }
         switch phase {
-        case .day: "sun.max.fill"
-        case .night: "moon.fill"
-        case .transitioningToNight, .transitioningToDay: "sun.haze.fill"
-        case .off: "circle.slash"
+        case .day: return "sun.max.fill"
+        case .night: return "moon.fill"
+        case .transitioningToNight, .transitioningToDay: return "sun.haze.fill"
+        case .off: return "circle.slash"
         }
     }
 
@@ -39,6 +47,7 @@ struct MenuBarIcon: View {
 private struct MenuBarContextMenuCatcher: NSViewRepresentable {
     let settings: SettingsStore
     let gammaController: DisplayGammaController
+    let scheduleEngine: ScheduleEngine
 
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
@@ -49,10 +58,11 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
     func updateNSView(_ nsView: NSView, context: Context) {
         context.coordinator.settings = settings
         context.coordinator.gammaController = gammaController
+        context.coordinator.scheduleEngine = scheduleEngine
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(settings: settings, gammaController: gammaController)
+        Coordinator(settings: settings, gammaController: gammaController, scheduleEngine: scheduleEngine)
     }
 
     static func dismantleNSView(_ nsView: NSView, coordinator: Coordinator) {
@@ -62,12 +72,14 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
     final class Coordinator {
         var settings: SettingsStore
         var gammaController: DisplayGammaController
+        var scheduleEngine: ScheduleEngine
         private weak var view: NSView?
         private var monitor: Any?
 
-        init(settings: SettingsStore, gammaController: DisplayGammaController) {
+        init(settings: SettingsStore, gammaController: DisplayGammaController, scheduleEngine: ScheduleEngine) {
             self.settings = settings
             self.gammaController = gammaController
+            self.scheduleEngine = scheduleEngine
         }
 
         func install(on view: NSView) {
@@ -97,6 +109,26 @@ private struct MenuBarContextMenuCatcher: NSViewRepresentable {
                     state: settings.scheduleMode == mode ? .on : .off
                 ) { [weak self] in
                     Task { @MainActor in self?.settings.scheduleMode = mode }
+                })
+            }
+
+            menu.addItem(.separator())
+
+            if settings.suspendUntil != nil {
+                menu.addItem(ClosureMenuItem(title: "Resume") { [weak self] in
+                    Task { @MainActor in self?.settings.suspendUntil = nil }
+                })
+            } else {
+                menu.addItem(ClosureMenuItem(title: "Suspend for 1 Hour") { [weak self] in
+                    Task { @MainActor in
+                        self?.settings.suspendUntil = Date().addingTimeInterval(3600)
+                    }
+                })
+                menu.addItem(ClosureMenuItem(title: "Suspend until Sunrise") { [weak self] in
+                    Task { @MainActor in
+                        guard let self else { return }
+                        self.settings.suspendUntil = self.scheduleEngine.nextSunrise()
+                    }
                 })
             }
 

@@ -4,6 +4,7 @@ enum ScheduleMode: String, CaseIterable, Identifiable {
     case auto
     case forceDay
     case forceNight
+    case custom
     case off
 
     var id: String { rawValue }
@@ -13,6 +14,7 @@ enum ScheduleMode: String, CaseIterable, Identifiable {
         case .auto: "Auto"
         case .forceDay: "Day"
         case .forceNight: "Night"
+        case .custom: "Custom"
         case .off: "Off"
         }
     }

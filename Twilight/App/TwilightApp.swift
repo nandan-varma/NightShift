@@ -15,7 +15,8 @@ struct TwilightApp: App {
             MenuBarIcon(
                 phase: appDelegate.scheduleEngine.currentPhase,
                 settings: appDelegate.settings,
-                gammaController: appDelegate.gammaController
+                gammaController: appDelegate.gammaController,
+                scheduleEngine: appDelegate.scheduleEngine
             )
         }
         .menuBarExtraStyle(.window)
