@@ -2,6 +2,8 @@
 
 Everything needed to work with this app's App Store Connect listing without re-discovering it from scratch. Written 2026-08-06 after the 5.2.5 rejection/resubmission cycle. Keep this updated whenever ASC state changes meaningfully (new build, metadata edits, rejection, domain change).
 
+**Current state (checked 2026-11-08):** macOS version 1.0 (build 2) is `READY_FOR_SALE` (release type manual, copyright 2026 Nandan Varma). Nothing pending in review.
+
 ## App identity
 
 | | |
@@ -91,7 +93,7 @@ App Store Connect API key (for unattended uploads via `altool`):
 This is the exact sequence used to go from "code changes merged" to "new build waiting for review." No manual Xcode Organizer/Transporter step needed — it's fully scriptable from this repo given the credentials above are present on the machine.
 
 ```sh
-cd /Users/nandan/dev/NightShift
+cd /Users/nandan/dev/apps/NightShift
 
 # 1. Bump the build number (CURRENT_PROJECT_VERSION) — ASC rejects re-uploading
 #    a version+build pair that's already been used. Check the current value
